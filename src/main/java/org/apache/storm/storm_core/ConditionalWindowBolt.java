@@ -64,7 +64,7 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 			if(state){ // It is now false, finishing windows
 				// Calculate top3 from such conditional windows. 
 					int[] top3 = new int[]{0, 0, 0};
-					String[] top3k = new String[]{"", "", ""};
+					String[] top3k = new String[]{"null", "null", "null"};
 					for (Map.Entry<String, Integer> entry : langMap.get(langField).entrySet()) {
 						int value = entry.getValue();				
 						String key = entry.getKey();					
