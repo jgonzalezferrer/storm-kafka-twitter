@@ -41,8 +41,10 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		for(int i=0; i<langs.length; i++){
 			langMap.put(langs[i], new DefaultTreeMap<String, Integer>(0));
 		}
+		//Adding keywords: take from input
 		keyWords.add("es:jaula");
 		keyWords.add("en:brexit");
+		
 		for(int i=0;i<keyWords.size(); i++){
 			System.out.println(keyWords.get(i));
 		}
@@ -61,12 +63,9 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 			// From true to negative -> send conditional windows
 			if(state){ // It is now false, finishing windows
 				// Calculate top3 from such conditional windows. 
-				System.out.print(
-						"kpasa"+langs.length);
-				for(int j=0; j<langs.length; j++){
 					int[] top3 = new int[]{0, 0, 0};
 					String[] top3k = new String[]{"", "", ""};
-					for (Map.Entry<String, Integer> entry : langMap.get(langs[j]).entrySet()) {
+					for (Map.Entry<String, Integer> entry : langMap.get(langField).entrySet()) {
 						int value = entry.getValue();				
 						String key = entry.getKey();					
 
@@ -91,14 +90,12 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 
 
 					}
-					for(int i=0; i<top3.length; i++){
-						System.out.print("key: "+top3k[i]+" value: "+top3[i]);
+					for(int i=0; i<top3.length; i++){ //Print top 3 keys + its values
+						System.out.print(" key: "+top3k[i]+" value: "+top3[i]);
 					}
 					System.out.println();
 
-				}
-
-				langMap.put(langField, new DefaultHashMap<String, Integer>(0));
+				langMap.put(langField, new DefaultHashMap<String, Integer>(0)); //Reset window accumulator
 
 			}
 		}
@@ -106,13 +103,9 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		// If already activated
 
 		else if(conditionalWindow.get(langField)){
-			//System.out.println("encendido");
 			// Update occurrence
 			Map<String, Integer> aux = langMap.get(langField);
 			aux.put(valueField, aux.get(valueField)+1);
-
-
-			//System.out.println("Reciving " + valueField);
 		}
 
 		// DEBUG
