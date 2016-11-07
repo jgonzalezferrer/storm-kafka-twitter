@@ -12,30 +12,39 @@ import java.util.Map;
 public class HashtagSpout extends BaseRichSpout {
 
     private SpoutOutputCollector collector;
-    public static final String CURRENCYFIELDNAME ="currencyID";
-    public static final String CURRENCYFIELDVALUE ="value";
+    public static final String LANG ="currencyID";
+    public static final String HASHTAG = "value";
     public static final String CURRENCYOUSTREAM ="currencyStream";
 
     public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
         this.collector = spoutOutputCollector;
     }
     
-    private static String[] testArray = new String[]{"lebron","lebron","lebron","lebron","durant",
-    		"durant","durant","westbrook",
-    		"ibaka","rubio"};
-
+    private int cont=0;
+    
+//    private static String[] testArray = new String[]{"lebron","lebron","lebron","lebron","durant",
+//    		"durant","durant", "ibaka","rubio","curry", "rubio"};
+//    private static String[] testArray = new String[]{"es,casa", "es,ordenador", "es,ordenador", "es,ordenador",
+//    		"es,casa", "es,coche", "es,coche", "es,jaula", "en,house", "en,house", "en,house", 
+//    		"en,tree","en,tree", "en,toilet", "en,toilet", "en,jail"};
+    private static String[] testArray = new String[]{"es,casa","en,ashtray", "es,pepe","es,pepe","en,brexit", "es,ordenador", "en,trump","es,jaula", "en,hillary","es,ordenador", "es,ordenador",
+    		"es,coche","en,hillary", "es,coche", "en,yesorno","es,pepe", "en,brexit","es,jaula", "es,casa","en,ashtray"};
+    
     private Values randomValue(){
-        int value = (int) Math.floor(Math.random()*10);
-        return new Values(testArray[value]);
+        //int rand = (int) Math.floor(Math.random()*testArray.length);
+    	String[] parts = testArray[cont++%testArray.length].split(",");
+    	String lang = parts[0];
+    	String value = parts[1];
+        return new Values(lang, value);
     }
 
     public void nextTuple() {
         Values randomValue = this.randomValue();
-        System.out.println("emitting " + randomValue);
+        //System.out.println("emitting " + randomValue);
         collector.emit(CURRENCYOUSTREAM, randomValue);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declareStream(CURRENCYOUSTREAM, new Fields(CURRENCYFIELDVALUE));
+        outputFieldsDeclarer.declareStream(CURRENCYOUSTREAM, new Fields(LANG, HASHTAG));
     }
 }
