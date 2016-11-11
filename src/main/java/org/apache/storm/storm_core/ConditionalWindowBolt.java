@@ -111,7 +111,8 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 			aux.put(valueField, aux.get(valueField)+1);
 		}
 	}
-
+	
+		//To parallelize: Send each language from the spout to each bolt for a language-specific bolt
 
 	public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
 

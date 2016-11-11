@@ -19,6 +19,14 @@ public class Top3App
 
         Utils.sleep(10000);
         
+        
+       //Send separate languages to different bolts, each bolt process a language and the result is received 
+        //for each language, create a bolt and send each instance of that language to that bolt
+	//Instead of shuffle, .fieldsGrouping("tempSpout", TemperatureSpout.TEMPERATURE_STREAMNAME, new Fields("roomID"))
+      //config.setNumWorkers(4)
+      //config.setDebug(true) to debug
+      		
+      //Remove setDebug and every printout before deploying because it slows down the app
        
         
 
