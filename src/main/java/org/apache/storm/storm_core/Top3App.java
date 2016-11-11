@@ -22,6 +22,10 @@ public class Top3App
         
        //Send separate languages to different bolts, each bolt process a language and the result is received 
         //for each language, create a bolt and send each instance of that language to that bolt
+        
+        //Key = language
+        //Get w
+        
 	//Instead of shuffle, .fieldsGrouping("tempSpout", TemperatureSpout.TEMPERATURE_STREAMNAME, new Fields("roomID"))
       //config.setNumWorkers(4)
       //config.setDebug(true) to debug

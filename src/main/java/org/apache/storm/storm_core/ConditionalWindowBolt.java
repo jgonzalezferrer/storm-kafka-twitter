@@ -30,8 +30,12 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 	
 	private int counter = 0;
 	
+	//Constructor executed in nimbus (central node)
+	
+	
+	
 	public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
-
+		// Executed in the workers
 		// TreeMap to save the words alphabetically.
 		for(int i=0; i<langs.length; i++){
 			langMap.put(langs[i], new DefaultTreeMap<String, Integer>(0));
