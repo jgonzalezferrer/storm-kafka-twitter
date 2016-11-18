@@ -12,7 +12,7 @@ import java.util.Map;
 public class HashtagSpout extends BaseRichSpout {
 
     private SpoutOutputCollector collector;
-    public static final String LANG ="currencyID";
+    public static final String LANG ="langs";
     public static final String HASHTAG = "value";
     public static final String CURRENCYOUSTREAM ="currencyStream";
 

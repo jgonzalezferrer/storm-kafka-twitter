@@ -25,6 +25,8 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 
 	// Map to store lapses between conditional windows. We will store words in the hashtags occurrences if this flag is on.	
 	public HashMap<String, Boolean> conditionalWindow = new DefaultHashMap<String, Boolean>(false);
+	
+	//public boolean conditionalWindowAct = false;
 
 	private String[] langs = new String[]{"es","en"}; //take from input.
 	
