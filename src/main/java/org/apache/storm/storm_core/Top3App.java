@@ -19,20 +19,23 @@ public class Top3App
     	
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("currencySpout", new HashtagSpout());
-        
+        builder.setBolt("converterBolt", new ConditionalWindowBolt("Lang bolt"),langs.length)
+        .fieldsGrouping("currencySpout", HashtagSpout.NORMALSTREAM, new Fields(LANG));
+       /*
         for (int i=0;i<langs.length;i++){
         	String str1 = "converterBolt "+langs[i];
-         builder.setBolt(str1, new ConditionalWindowBolt())
-         .fieldsGrouping("currencySpout", HashtagSpout.CURRENCYOUSTREAM, new Fields(LANG));
+        	String str2 = "currencySpout";
+         builder.setBolt(str1, new ConditionalWindowBolt(langs[i]),2)
+         .fieldsGrouping(str2, HashtagSpout.NORMALSTREAM, new Fields(LANG));
        //Instead of shuffle, which sends everything to the same spout
-        }
+        }*/
         
         Config conf = new Config();
         //conf.setNumWorkers(langs.length); //Number of working nodes
-        //conf.setDebug(true); //To debug. Remove when deployement
+        //conf.setDebug(true); //To debug. Remove when deployment
         
         LocalCluster cluster = new LocalCluster();
-        cluster.submitTopology("converterTopology", new Config(), builder.createTopology());
+        cluster.submitTopology("converterTopology",conf , builder.createTopology());
 
         Utils.sleep(10000);
         

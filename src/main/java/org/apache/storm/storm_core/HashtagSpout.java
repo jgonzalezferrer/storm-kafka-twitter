@@ -14,7 +14,7 @@ public class HashtagSpout extends BaseRichSpout {
     private SpoutOutputCollector collector;
     public static final String LANG ="langs";
     public static final String HASHTAG = "value";
-    public static final String CURRENCYOUSTREAM ="currencyStream";
+    public static final String NORMALSTREAM ="currencyStream";
 
     public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
         this.collector = spoutOutputCollector;
@@ -27,8 +27,9 @@ public class HashtagSpout extends BaseRichSpout {
 //    private static String[] testArray = new String[]{"es,casa", "es,ordenador", "es,ordenador", "es,ordenador",
 //    		"es,casa", "es,coche", "es,coche", "es,jaula", "en,house", "en,house", "en,house", 
 //    		"en,tree","en,tree", "en,toilet", "en,toilet", "en,jail"};
-    private static String[] testArray = new String[]{"es,casa","en,ashtray", "es,pepe","es,pepe","en,brexit", "es,ordenador", "en,trump","es,jaula", "en,hillary","es,ordenador", "es,ordenador",
-    		"es,coche","en,hillary", "es,coche", "en,yesorno","es,pepe", "en,brexit","es,jaula", "es,casa","en,ashtray"};
+    private static String[] testArray = new String[]{"es,casa","en,ashtray", "es,pepe","es,pepe","en,brexit", "es,ordenador", 
+    		"en,trump","es,jaula", "en,hillary","es,ordenador", "es,ordenador",
+    		"es,coche","en,hillary", "es,coche", "en,yesorno","en,shit","es,pepe", "en,brexit","es,jaula", "es,casa","en,ashtray"};
     
     private Values randomValue(){
         //int rand = (int) Math.floor(Math.random()*testArray.length);
@@ -41,10 +42,10 @@ public class HashtagSpout extends BaseRichSpout {
     public void nextTuple() {
         Values randomValue = this.randomValue();
         //System.out.println("emitting " + randomValue);
-        collector.emit(CURRENCYOUSTREAM, randomValue);
+        collector.emit(NORMALSTREAM, randomValue);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declareStream(CURRENCYOUSTREAM, new Fields(LANG, HASHTAG));
+        outputFieldsDeclarer.declareStream(NORMALSTREAM, new Fields(LANG, HASHTAG));
     }
 }
