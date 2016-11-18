@@ -27,12 +27,10 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 	
 	public boolean conditionalWindowAct = false;
 	
-	private String lang, bolt;
-	
 	private int counter = 0;
 	
 	//Constructor executed in nimbus (central node)
-	public ConditionalWindowBolt(String lang){
+	public ConditionalWindowBolt(){
 	}
 	
 	

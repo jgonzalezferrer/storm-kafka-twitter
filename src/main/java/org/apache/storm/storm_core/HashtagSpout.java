@@ -29,7 +29,7 @@ public class HashtagSpout extends BaseRichSpout {
 //    		"en,tree","en,tree", "en,toilet", "en,toilet", "en,jail"};
     private static String[] testArray = new String[]{"es,casa","en,ashtray", "es,pepe","es,pepe","en,brexit", "es,ordenador", 
     		"en,trump","es,jaula", "en,hillary","es,ordenador", "es,ordenador",
-    		"es,coche","en,hillary", "es,coche", "en,yesorno","en,shit","es,pepe", "en,brexit","es,jaula", "es,casa","en,ashtray"};
+    		"es,coche","en,hillary", "es,coche", "en,yesorno","es,pepe", "en,brexit","es,jaula", "es,casa","en,ashtray"};
     
     private Values randomValue(){
         //int rand = (int) Math.floor(Math.random()*testArray.length);
