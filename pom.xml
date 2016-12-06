@@ -26,5 +26,12 @@
       <artifactId>storm-core</artifactId>
       <version>1.0.2</version>
     </dependency>
+    
+  	<dependency>
+   	   <groupId>org.apache.kafka</groupId>
+	   <artifactId>kafka-clients</artifactId>
+	   <version>0.10.1.0</version>
+ 	</dependency>
+    
   </dependencies>
 </project>

@@ -91,6 +91,8 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		String valueField = (String) tuple.getValueByField(HashtagSpout.HASHTAG);
 		String langField =  (String) tuple.getValueByField(HashtagSpout.LANG);	
 		
+		//Take keyword from file
+		
 		if(langField.equals("es"))
 			keyWord = langField+":jaula";
 		else if(langField.equals("en"))
