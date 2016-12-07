@@ -1,5 +1,6 @@
-package upm.cloud.project1.twitterApp;
+package master2016;
 import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,7 +12,7 @@ import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
-import org.scribe.oauth.OAuthService;;
+import org.json.*;
 
 public class TwitterApp 
 {
@@ -31,9 +32,14 @@ public class TwitterApp
         String kafkaUrl=args[5];
         String fileName=args[6];
         
+        for(int i=0; i<args.length; i++){
+        	System.out.println(args[i]);
+        }
+        
         if(mode.equals("1")){
         	try{
-         reader = new BufferedReader(new FileReader(fileName));}
+         reader = new BufferedReader(new FileReader(fileName));
+         }
         	catch(FileNotFoundException e){
         		System.err.println("Unable to read the file with the name "+fileName);
         		return;
@@ -52,7 +58,7 @@ public class TwitterApp
         	
         	serv.build().signRequest(tok, request);
         	Response response = request.send();
-        	reader= new BufferedReader(new InputStreamReader(response.getStream()));
+        	reader = new BufferedReader(new InputStreamReader(response.getStream()));
         	
         }
         else{
@@ -60,13 +66,30 @@ public class TwitterApp
         	return;
         }
         //TODO: Change topic to the language
-        TwitterKafkaProducer prod = new TwitterKafkaProducer(kafkaUrl,"myTopic");
+        TwitterKafkaProducer prod = new TwitterKafkaProducer(kafkaUrl,"twitterStream");
         String tweet;
         try {
-			while((tweet=reader.readLine())!=null){
-				//TODO: Sacar mierdas del tweet (del json y tal)
-				prod.sendTweet("myTweet");
-			}
+        	String line = reader.readLine();
+        	System.out.println(line);
+        	JSONObject obj = new JSONObject(line);
+        	String lang = obj.getString("lang");
+        	
+        	JSONArray hashtags = obj.getJSONObject("entities").getJSONArray("hashtags");
+        	for(int i=0; i<hashtags.length(); i++){
+        		String hashtag = hashtags.getJSONObject(i).getString("text");
+        		prod.sendTweet(new Tweet(lang, hashtag));
+        	}
+        	
+        	
+        	System.out.println(lang);
+        	//System.out.println(hashtag);
+        	
+        	
+			//while((tweet=reader.readLine())!=null){
+				
+				////TODO: Sacar mierdas del tweet (del json y tal)
+				//prod.sendTweet("myTweet");
+			//}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

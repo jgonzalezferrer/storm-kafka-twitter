@@ -1,0 +1,1 @@
+java -cp twitterApp/target/twitterApp-0.0.1-SNAPSHOT.jar upm.cloud.project1.twitterApp.TwitterApp 2 XvvnWPT9wNQWCWMkvAI4w52Ss 0xhNhF3MuL4EhHrH7WODxIJSUeqLPbOyYJjFzpsnA3L2paKJKi 269458599-G9yYmgeYBUOwQiyyG98HCtTMo4JkG9HOcG2NnIvC SRXysXsqfjMx1C4ENVXRW5gIQW47zct1B2wNvKvwNblWG 6 fichero.txt
