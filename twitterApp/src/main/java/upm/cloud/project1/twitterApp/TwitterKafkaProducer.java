@@ -10,7 +10,7 @@ public class TwitterKafkaProducer {
 	private String kafkaUrl;
 	private String topic;
 	private static Properties props = new Properties();
-	private static KafkaProducer<String, String> prod = new KafkaProducer<String, String>(props);
+	private static KafkaProducer<String, byte[]> prod = new KafkaProducer<String, byte[]>(props);
 	public TwitterKafkaProducer(String kafkaUrl, String topic){
 		this.kafkaUrl=kafkaUrl;
 		this.topic = topic;
@@ -22,10 +22,11 @@ public class TwitterKafkaProducer {
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");		 
 	}
+	
 
 	public void sendTweet(String tweet){
 		//TODO: partition
-		prod.send(new ProducerRecord<String, String>(topic,tweet));
+		prod.send(new ProducerRecord<String, byte[]>(topic,tweet.getBytes()));
 	}
 
 	public void close(){

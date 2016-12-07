@@ -41,12 +41,12 @@
   		<groupId>org.apache.storm</groupId>
   		<artifactId>storm-core</artifactId>
   		<scope>provided</scope>
-  		<version>0.10.0</version>
+  		<version>1.0.2</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.storm</groupId>
   		<artifactId>storm-kafka</artifactId>
-  		<version>0.10.0</version>
+  		<version>1.0.2</version>
 </dependency>
     
   </dependencies>

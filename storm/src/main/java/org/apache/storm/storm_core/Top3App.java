@@ -14,8 +14,15 @@ public class Top3App
 	
     public static void main( String[] args )
     {
-    	
-    	String[] langs = new String[]{"es","en"}; //take from input.
+    	if (args.length!=4){
+    		System.err.println("Incorrect number of parameters, it must be 4");
+    		return;
+    	}
+    	String langList = args[0];
+    	String [] langs = langList.split(",");
+    	String zookeeperUrl=args[1];
+    	String topologyName=args[2];
+    	String folder = args[3];
     	
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("currencySpout", new HashtagSpout());
