@@ -66,30 +66,33 @@ public class TwitterApp
         	return;
         }
         //TODO: Change topic to the language
-        TwitterKafkaProducer prod = new TwitterKafkaProducer(kafkaUrl,"twitterStream");
+        TwitterKafkaProducer prod = new TwitterKafkaProducer(kafkaUrl);
         String tweet;
         try {
-        	String line = reader.readLine();
-        	System.out.println(line);
+        	while((tweet=reader.readLine())!=null){
+        	String line = tweet;
+        	//System.out.println(line);
         	JSONObject obj = new JSONObject(line);
         	String lang = obj.getString("lang");
-        	
+        	System.out.println("Lang is : "+lang);
+        	//TODO: if(lang is in listoflangs)
+        	if (lang.equals("en")){
         	JSONArray hashtags = obj.getJSONObject("entities").getJSONArray("hashtags");
         	for(int i=0; i<hashtags.length(); i++){
         		String hashtag = hashtags.getJSONObject(i).getString("text");
+        		System.out.println("Hashtag is: "+hashtag);
         		prod.sendTweet(new Tweet(lang, hashtag));
         	}
+        	}
+        
+        	}	
+        		
+
         	
         	
-        	System.out.println(lang);
-        	//System.out.println(hashtag);
-        	
-        	
-			//while((tweet=reader.readLine())!=null){
+			
 				
-				////TODO: Sacar mierdas del tweet (del json y tal)
-				//prod.sendTweet("myTweet");
-			//}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

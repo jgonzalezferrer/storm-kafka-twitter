@@ -25,9 +25,10 @@ public class Top3App
     	String folder = args[3];
     	
         TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout("currencySpout", new HashtagSpout());
-        builder.setBolt("converterBolt", new ConditionalWindowBolt(),langs.length)
-        .fieldsGrouping("currencySpout", HashtagSpout.NORMALSTREAM, new Fields(LANG));
+        builder.setSpout("KafkaSpout", new KafkaTwitterSpout(zookeeperUrl,"en").getKafkaSpout());
+        builder.setBolt("LanguageBolt", new ConditionalWindowBolt(),langs.length)
+        	.shuffleGrouping("KafkaSpout");
+        //.fieldsGrouping("currencySpout", HashtagSpout.NORMALSTREAM, new Fields(LANG));
         
         
         //Possible further parallelization: Send from first language bolt towards a bolt that counts

@@ -1,6 +1,7 @@
 package master2016;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -9,13 +10,11 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class TwitterKafkaProducer {
 	private String kafkaUrl;
-	private String topic;
 	private static Properties props = new Properties();
 	private static KafkaProducer<String, byte[]> prod;
 	
-	public TwitterKafkaProducer(String kafkaUrl, String topic){
+	public TwitterKafkaProducer(String kafkaUrl){
 		this.kafkaUrl=kafkaUrl;
-		this.topic = topic;
 		System.out.println("second");
 		System.out.println(kafkaUrl);
 		props.put("bootstrap.servers", kafkaUrl);
@@ -31,12 +30,10 @@ public class TwitterKafkaProducer {
 	
 
 	public void sendTweet(Tweet tweet){
-		//TODO: partition
 		try {
-			prod.send(new ProducerRecord<String, byte[]>(topic, tweet.serialize()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			prod.send(new ProducerRecord<String, byte[]>(tweet.getLang(), tweet.getHashtag().getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			System.err.println("Problem serializing");
 		}
 	}
 

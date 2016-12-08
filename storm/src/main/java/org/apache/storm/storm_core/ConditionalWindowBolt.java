@@ -85,8 +85,10 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 
 	public void execute(Tuple tuple) {
 	
+		String valueField = (String) tuple.getValueByField(TwitterScheme.KafkaValue);
 		
-		
+		System.out.println("Hashtag received from Kafka: "+valueField);
+		/*
 		
 		String valueField = (String) tuple.getValueByField(HashtagSpout.HASHTAG);
 		String langField =  (String) tuple.getValueByField(HashtagSpout.LANG);	
@@ -117,7 +119,7 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		else if(conditionalWindowAct){
 			// Update occurrence
 			langMap.put(valueField, langMap.get(valueField)+1);
-		}
+		}*/
 	}
 	
 		//To parallelize: Send each language from the spout to each bolt for a language-specific bolt
