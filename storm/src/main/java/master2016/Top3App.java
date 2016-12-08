@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
+import org.apache.storm.StormSubmitter;
+import org.apache.storm.generated.AlreadyAliveException;
+import org.apache.storm.generated.AuthorizationException;
+import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.kafka.KafkaSpout;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
@@ -71,9 +75,21 @@ public class Top3App
         Config conf = new Config();
 //        //conf.setNumWorkers(langs.length); //Number of working nodes
 //        //conf.setDebug(true); //To debug. Remove when deployment
-//        
-        LocalCluster cluster = new LocalCluster();
-        cluster.submitTopology(topologyName,conf , builder.createTopology());
+//    
+        try {
+			StormSubmitter.submitTopology(topologyName,conf , builder.createTopology());
+		} catch (AlreadyAliveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidTopologyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AuthorizationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //LocalCluster cluster = new LocalCluster();
+        //cluster.submitTopology(topologyName,conf , builder.createTopology());
 
         //Utils.sleep(10000);
               		       
