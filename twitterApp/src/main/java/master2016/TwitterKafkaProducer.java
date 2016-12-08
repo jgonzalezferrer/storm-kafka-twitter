@@ -18,10 +18,10 @@ public class TwitterKafkaProducer {
 		System.out.println("second");
 		System.out.println(kafkaUrl);
 		props.put("bootstrap.servers", kafkaUrl);
-		props.put(ProducerConfig.ACKS_CONFIG, "all");
-		props.put(ProducerConfig.RETRIES_CONFIG, 0);
-		props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-		props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+		//props.put(ProducerConfig.ACKS_CONFIG, "all");
+		//props.put(ProducerConfig.RETRIES_CONFIG, 0);
+		//props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+		//props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.ByteArraySerializer");		 
 		
@@ -33,7 +33,8 @@ public class TwitterKafkaProducer {
 		try {
 			prod.send(new ProducerRecord<String, byte[]>(tweet.getLang(), tweet.getHashtag().getBytes("UTF-8")));
 		} catch (UnsupportedEncodingException e) {
-			System.err.println("Problem serializing");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

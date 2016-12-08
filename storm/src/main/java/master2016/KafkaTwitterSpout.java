@@ -16,18 +16,19 @@ import org.apache.storm.kafka.SpoutConfig;
 import org.apache.storm.kafka.ZkHosts;
 
 public class KafkaTwitterSpout {
-	
+
 	private KafkaSpout kafkaSpout;
-    public static final String NORMALSTREAM ="languageStream";
+	public static final String NORMALSTREAM ="languageStream";
+	
 	public KafkaTwitterSpout(String zkConn, String topicName){
-	BrokerHosts hosts = new ZkHosts(zkConn);
-	SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
-	spoutConfig.scheme =  new SchemeAsMultiScheme(new TwitterScheme());
-	spoutConfig.startOffsetTime = OffsetRequest.EarliestTime();
-	kafkaSpout = new KafkaSpout(spoutConfig);
-	
+		BrokerHosts hosts = new ZkHosts(zkConn);
+		SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
+		spoutConfig.scheme =  new SchemeAsMultiScheme(new TwitterScheme());
+		spoutConfig.startOffsetTime = OffsetRequest.EarliestTime();
+		kafkaSpout = new KafkaSpout(spoutConfig);
+		
 	}
-	
+
 	public KafkaSpout getKafkaSpout(){
 		return kafkaSpout;
 	}

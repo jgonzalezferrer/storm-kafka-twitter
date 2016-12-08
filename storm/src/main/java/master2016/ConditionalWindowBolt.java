@@ -31,6 +31,7 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 	
 	//Constructor executed in nimbus (central node)
 	public ConditionalWindowBolt(){
+		System.out.println("Constructorrrrrrrrr");
 	}
 	
 	
@@ -39,6 +40,7 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		// TreeMap to save the words alphabetically.
 		
 		//Adding keywords: take from inpu
+		System.out.println("Prepareeeeeeeeeeeeeeeeeee");
 	}
 	
 	private String top3Algorithm(String langField){
@@ -84,8 +86,10 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 	
 
 	public void execute(Tuple tuple) {
+		System.out.println("Executeeeeeeeeeeeeeeee");
 	
 		String valueField = (String) tuple.getValueByField(TwitterScheme.KafkaValue);
+		
 		
 		System.out.println("Hashtag received from Kafka: "+valueField);
 		/*

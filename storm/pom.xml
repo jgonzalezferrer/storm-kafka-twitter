@@ -40,6 +40,7 @@
   	<dependency>
   		<groupId>org.apache.storm</groupId>
   		<artifactId>storm-core</artifactId>
+  		 <scope>compile</scope> 
   		<!--  <scope>provided</scope> -->
   		<version>1.0.2</version>
   	</dependency>
