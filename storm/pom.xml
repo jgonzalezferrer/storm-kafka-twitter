@@ -51,4 +51,44 @@
 </dependency>
     
   </dependencies>
+  
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>appassembler-maven-plugin</artifactId>
+				<version>1.10</version>
+				<executions>
+					<execution>
+						<id>assemble-standalone</id>
+						<phase>package</phase>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+					<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+					<copyConfigurationDirectory>true</copyConfigurationDirectory>
+					<repositoryLayout>flat</repositoryLayout>
+					<platforms>
+						<platform>unix</platform>
+					</platforms>
+					<programs>
+						<program>
+							<mainClass>master2016.Top3App</mainClass>
+							<name>startTop3App.sh</name>
+							<jvmSettings>
+								<extraArguments>
+									<extraArgument>-server</extraArgument>
+								</extraArguments>
+							</jvmSettings>
+						</program>
+					</programs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
 </project>

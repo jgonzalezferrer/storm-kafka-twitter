@@ -78,13 +78,13 @@ public class TwitterApp
 				
 				System.out.println("Lang is : "+lang);
 				//TODO: if(lang is in listoflangs)
-				if (lang.equals("en")){
+				//if (lang.equals("en")){
 					JSONArray hashtags = obj.getJSONObject("entities").getJSONArray("hashtags");
 					for(int i=0; i<hashtags.length(); i++){
 						String hashtag = hashtags.getJSONObject(i).getString("text");
 						System.out.println("Hashtag is: "+hashtag);
 						prod.sendTweet(new Tweet(lang, hashtag));
-					}
+					//}
 				}
 
 			}	

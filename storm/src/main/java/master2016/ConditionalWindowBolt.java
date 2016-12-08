@@ -10,6 +10,9 @@ import master2016.DefaultHashMap;
 import master2016.DefaultTreeMap;
 
 import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +24,8 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 	public Map<String, Integer> langMap = new DefaultTreeMap<String, Integer>(0);
 
 	// Key words for conditional windows. The words that initialize conditional windows.
-	public String keyWord = "";
+	private String keyWord;
+	private String langField;
 
 	// Map to store lapses between conditional windows. We will store words in the hashtags occurrences if this flag is on.	
 	
@@ -29,9 +33,13 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 	
 	private int counter = 0;
 	
+	PrintWriter writer;
+	
 	//Constructor executed in nimbus (central node)
-	public ConditionalWindowBolt(){
-		System.out.println("Constructorrrrrrrrr");
+	public ConditionalWindowBolt(String keyWord, String langField){
+		this.keyWord = keyWord;
+		this.langField = langField;
+		
 	}
 	
 	
@@ -40,10 +48,18 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		// TreeMap to save the words alphabetically.
 		
 		//Adding keywords: take from inpu
-		System.out.println("Prepareeeeeeeeeeeeeeeeeee");
+		try {
+			this.writer = new PrintWriter(this.langField+"_01.log", "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	private String top3Algorithm(String langField){
+	private String top3Algorithm(){
 		
 		int[] top3 = new int[]{0, 0, 0};
 		String[] top3k = new String[]{"null", "null", "null"};
@@ -71,7 +87,7 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 			}
 		}
 		
-		String toReturn = counter+++","+langField+",";
+		String toReturn = ++counter+","+langField+",";
 		for(int i=0; i<top3.length; i++){ //Print top 3 keys + its values
 			if(i==top3.length-1){
 				toReturn += top3k[i]+","+top3[i];
@@ -91,26 +107,23 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		
 		
 		System.out.println("Hashtag received from Kafka: "+valueField);
-		/*
 		
-		String valueField = (String) tuple.getValueByField(HashtagSpout.HASHTAG);
-		String langField =  (String) tuple.getValueByField(HashtagSpout.LANG);	
 		
 		//Take keyword from file
 		
-		if(langField.equals("es"))
-			keyWord = langField+":jaula";
-		else if(langField.equals("en"))
-			keyWord = langField+":brexit";
+	
 				
-		if (keyWord.equals(langField+":"+valueField)) {
+		if (keyWord.equals(valueField)) {
 			// Activate or deactivate.
 			boolean state = conditionalWindowAct;
 			conditionalWindowAct=!state;
 			// From true to negative -> send conditional windows
 			if(state){ // It is now false, finishing windows
 				// Calculate top3 from such conditional windows.
-				String msg = top3Algorithm(langField);
+				String msg = top3Algorithm();
+				
+				writer.println(msg);
+				writer.flush();
 				System.out.println(msg);
 
 				langMap = new DefaultTreeMap<String, Integer>(0); //Reset window accumulator
@@ -122,7 +135,7 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 		else if(conditionalWindowAct){
 			// Update occurrence
 			langMap.put(valueField, langMap.get(valueField)+1);
-		}*/
+		}
 	}
 	
 		//To parallelize: Send each language from the spout to each bolt for a language-specific bolt
