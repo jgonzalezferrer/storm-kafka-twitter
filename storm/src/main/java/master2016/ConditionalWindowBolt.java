@@ -1,13 +1,13 @@
-package org.apache.storm.storm_core;
-
-import org.apache.storm.storm_core.DefaultTreeMap;
-import org.apache.storm.storm_core.DefaultHashMap;
+package master2016;
 
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
+
+import master2016.DefaultHashMap;
+import master2016.DefaultTreeMap;
 
 import java.util.List;
 import java.util.ArrayList;
