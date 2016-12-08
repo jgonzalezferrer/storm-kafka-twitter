@@ -40,12 +40,12 @@ public class Top3App
         //conf.setDebug(true); //To debug. Remove when deployment
         
         LocalCluster cluster = new LocalCluster();
-        cluster.submitTopology("converterTopology",conf , builder.createTopology());
+        cluster.submitTopology(topologyName,conf , builder.createTopology());
 
         Utils.sleep(10000);
               		       
 
-        cluster.killTopology("converterTopology");
+        cluster.killTopology(topologyName);
 
         cluster.shutdown();
     }
