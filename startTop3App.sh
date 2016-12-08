@@ -97,7 +97,7 @@ then
   REPO="$BASEDIR"/repo
 fi
 
-CLASSPATH="$BASEDIR"/etc:"$REPO"/kafka-clients-0.10.1.0.jar:"$REPO"/lz4-1.3.0.jar:"$REPO"/snappy-java-1.1.2.6.jar:"$REPO"/slf4j-api-1.7.21.jar:"$REPO"/scribe-1.3.7.jar:"$REPO"/json-20160810.jar:"$REPO"/twitterApp-0.0.1-SNAPSHOT.jar
+CLASSPATH="$BASEDIR"/etc:"$REPO"/kafka_2.11-0.8.2.1.jar:"$REPO"/scala-xml_2.11-1.0.2.jar:"$REPO"/metrics-core-2.2.0.jar:"$REPO"/jopt-simple-3.2.jar:"$REPO"/scala-parser-combinators_2.11-1.0.2.jar:"$REPO"/zkclient-0.3.jar:"$REPO"/scala-library-2.11.5.jar:"$REPO"/kafka-clients-0.8.2.1.jar:"$REPO"/lz4-1.2.0.jar:"$REPO"/snappy-java-1.1.1.6.jar:"$REPO"/zookeeper-3.4.6.jar:"$REPO"/jline-0.9.94.jar:"$REPO"/netty-3.7.0.Final.jar:"$REPO"/slf4j-api-1.7.7.jar:"$REPO"/storm-kafka-1.0.2.jar:"$REPO"/commons-io-2.5.jar:"$REPO"/curator-framework-2.10.0.jar:"$REPO"/curator-client-2.10.0.jar:"$REPO"/guava-16.0.1.jar:"$REPO"/commons-lang-2.5.jar:"$REPO"/json-simple-1.1.jar:"$REPO"/trandingTopology-1.0-SNAPSHOT.jar
 
 ENDORSED_DIR=
 if [ -n "$ENDORSED_DIR" ] ; then
@@ -119,10 +119,10 @@ fi
 
 exec "$JAVACMD" $JAVA_OPTS -server \
   -classpath "$CLASSPATH" \
-  -Dapp.name="startTwitterApp.sh" \
+  -Dapp.name="startTop3App.sh" \
   -Dapp.pid="$$" \
   -Dapp.repo="$REPO" \
   -Dapp.home="$BASEDIR" \
   -Dbasedir="$BASEDIR" \
-  master2016.TwitterApp \
+  master2016.Top3App \
   "$@"
