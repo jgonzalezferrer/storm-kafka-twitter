@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.spout.Scheme;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
@@ -21,13 +22,7 @@ public class TwitterScheme implements Scheme {
 		//String lang = json.getLang();
 		//String val = json.getVal();
 		
-		try {
-			return new Values(new String(bytes.array(), "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new Values();
-		}
+		return new Values(StringScheme.deserializeString(bytes));
 	}
 
 	

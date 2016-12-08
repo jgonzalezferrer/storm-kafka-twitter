@@ -13,6 +13,7 @@ import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.kafka.BrokerHosts;
 import org.apache.storm.kafka.KafkaSpout;
 import org.apache.storm.kafka.SpoutConfig;
+import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.ZkHosts;
 
 public class KafkaTwitterSpout {
@@ -24,8 +25,9 @@ public class KafkaTwitterSpout {
 		BrokerHosts hosts = new ZkHosts(zkConn);
 		SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
 		spoutConfig.scheme =  new SchemeAsMultiScheme(new TwitterScheme());
-		spoutConfig.startOffsetTime = OffsetRequest.EarliestTime();
+		spoutConfig.startOffsetTime = OffsetRequest.LatestTime();
 		kafkaSpout = new KafkaSpout(spoutConfig);
+		
 		
 	}
 

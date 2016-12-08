@@ -86,7 +86,6 @@ public class ConditionalWindowBolt extends BaseRichBolt {
 	
 
 	public void execute(Tuple tuple) {
-		System.out.println("Executeeeeeeeeeeeeeeee");
 	
 		String valueField = (String) tuple.getValueByField(TwitterScheme.KafkaValue);
 		
