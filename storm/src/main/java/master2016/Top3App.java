@@ -60,8 +60,10 @@ public class Top3App
     		  builder.setSpout("SPOUT_"+entry.getKey(), 
     				  new KafkaTwitterSpout(zookeeperUrl,entry.getKey()).getKafkaSpout());
     	       
-    		  builder.setBolt("BOLT_"+entry.getKey(), new ConditionalWindowBolt(entry.getValue(), entry.getKey()))
+    		  builder.setBolt("BOLT_WINDOW"+entry.getKey(), new ConditionalWindowBolt(entry.getValue(), entry.getKey()))
     	        	.shuffleGrouping("SPOUT_"+entry.getKey());
+    		      		  
+    		  builder.setBolt("BOLT_COUNT"+entry.getKey(), new CountBolt(entry.getKey(),folder)).shuffleGrouping("BOLT_WINDOW"+entry.getKey());
     	}
 
 //        
@@ -73,7 +75,8 @@ public class Top3App
 //        //so the counting is distributed. Then, unite those bolts in another final bolt per language 
 //        
         Config conf = new Config();
-//        //conf.setNumWorkers(langs.length); //Number of working nodes
+        conf.setNumWorkers(3); //Number of working nodes
+        //There's no great reason to use more than one worker per topology per machine.
 //        //conf.setDebug(true); //To debug. Remove when deployment
 //    
         try {
