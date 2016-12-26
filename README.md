@@ -16,13 +16,13 @@ $ target/appassembler/bin/startTwitterApp.sh mode apiKey apiSecret tokenValue to
 
 where:
 
-* mode: 1 means read from file, 2 read from the Twitter API.
-* apiKey: key associated with the Twitter app consumer.
-* apiSecret: secret associated with the Twitter app consumer.
-* tokenValue: access token associated with the Twitter app.
-* tokenSecret: access token secret.
-* kafkaBrokerURL: String in the format IP:port corresponding with the Kafka Broker
-* filename: path to the file with the tweets.
+* ````mode````: 1 means read from file, 2 read from the Twitter API.
+* ````apiKey````: key associated with the Twitter app consumer.
+* ````apiSecret````: secret associated with the Twitter app consumer.
+* ````tokenValue````: access token associated with the Twitter app.
+* ````tokenSecret````: access token secret.
+* ````kafkaBrokerURL````: String in the format IP:port corresponding with the Kafka Broker
+* ````filename````: path to the file with the tweets.
 
 Compile storm:
 
@@ -34,8 +34,8 @@ $ path/to/bin/storm jar target/trandingTopology-1.0-SNAPSHOT-jar-with-dependenci
 
 where:
 
-* langList: String with the list of languages (“lang” values) we are interested in and the associated special token. The list is in CSV format,
-example: en:house,pl:universidade,ar:carro,es:ordenador
-* kafkaBrokerURL: String IP:port of the Kafka Broker.
-* topologyName: String identifying the topology in the Storm Cluster.
-* outputFolder: path to the folder used to store the output files.
+* ````langList````: String with the list of languages (“lang” values) we are interested in and the associated special token. The list is in CSV format,
+example: en:house,pl:universidade,ar:carro,es:ordenador.
+* ````kafkaBrokerURL````: String IP:port of the Kafka Broker.
+* ````topologyName````: String identifying the topology in the Storm Cluster.
+* ````outputFolder````: path to the folder used to store the output files.
