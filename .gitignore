@@ -1,3 +1,5 @@
 .metadata\*
 src\metadata\*
 src\RemoteSystemTempFiles\*
+storm\target
+twitterApp\target
