@@ -14,7 +14,7 @@ Dependencies:
 
 Instructions on how to execute
 ----------- 
-Compile twitterApp:
+The TwitterApp has been configured and compiled with the ````appassembler```` maven plugin. Furthermore, a [Twitter development account](https://apps.twitter.com/) is needed in order to consume streaming live tweets:
 
 ````
 $ cd twitterApp
@@ -32,7 +32,7 @@ where:
 * ````kafkaBrokerURL````: String in the format IP:port corresponding with the Kafka Broker
 * ````filename````: path to the file with the tweets.
 
-Compile storm:
+Compile and execute Storm Topology:
 
 ````
 $ cd storm
@@ -47,3 +47,11 @@ example: en:house,pl:universidade,ar:carro,es:ordenador.
 * ````kafkaBrokerURL````: String IP:port of the Kafka Broker.
 * ````topologyName````: String identifying the topology in the Storm Cluster.
 * ````outputFolder````: path to the folder used to store the output files.
+
+TwitterApp
+-----------
+ Java application that reads tweets from	both the Twitter Streaming API and preloaded log file. The application uses Apache Kafka to store information in order to be able to run the application in a distributed environment. Furthermore, Kadka is horizontally scalable, fault-tolerant and avoid information lost.
+
+ Storm Topology
+ -----------
+ Storm topology for calculating the three more common hashtags (top3) in a set of languages over a configurable period of time (conditional window). A conditional window keeps all the tuples between two occurrences of a given word in the same language.
