@@ -50,8 +50,8 @@ example: en:house,pl:universidade,ar:carro,es:ordenador.
 
 TwitterApp
 -----------
- Java application that reads tweets from	both the Twitter Streaming API and preloaded log file. The application uses Apache Kafka to store information in order to be able to run the application in a distributed environment. Furthermore, Kadka is horizontally scalable, fault-tolerant and avoid information lost.
+Java application that reads tweets from	both the Twitter Streaming API and preloaded log file. The application uses Apache Kafka to store information in order to be able to run the application in a distributed environment. Furthermore, Kadka is horizontally scalable, fault-tolerant and avoid information lost.
 
- Storm Topology
- -----------
- Storm topology for calculating the three more common hashtags (top3) in a set of languages over a configurable period of time (conditional window). A conditional window keeps all the tuples between two occurrences of a given word in the same language.
+Storm Topology
+-----------
+Storm topology for calculating the three more common hashtags (top3) in a set of languages over a configurable period of time (conditional window).A conditional window keeps all the tuples between two occurrences of a given word in the same language.
