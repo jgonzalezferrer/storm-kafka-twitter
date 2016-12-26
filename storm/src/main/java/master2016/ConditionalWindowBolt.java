@@ -7,87 +7,96 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-
-import master2016.DefaultHashMap;
-import master2016.DefaultTreeMap;
-
-import java.util.List;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
+/** ConditionalWindowBolt: bolt for retrieving tweets between conditional windows.
+ * 
+ * Each of the spouts created given a language are connected to this first bolt. When the keyword appears, the bolt starts gathering the
+ * tweets from this conditional window, sending each of them to the next bolt, until the keyword appears again. 
+ * 
+ * 
+ * @param: keyWord, token for the given language.
+ *
+ */
 public class ConditionalWindowBolt extends BaseRichBolt {
 
-	// Map to save the list of hashtags occurrences between conditional windows for each language.
-	public Map<String, Integer> langMap = new DefaultTreeMap<String, Integer>(0);
-
-	// Key words for conditional windows. The words that initialize conditional windows.
+	private static final long serialVersionUID = 5379209227989927713L;
+	
+	/*
+	 * String defining the hashtag field.
+	 */
+	public static final String HASHTAGFIELD = "hashtagValue";
+	
+	/*
+	 * String defining the stop condition field.
+	 */
+	public static final String STOPCONDITIONFIELD = "stopField";
+	
+	/*
+	 * Key word for the conditional window. The word that initialize and stop conditional windows.
+	 */
 	private String keyWord;
-	private String langField;
-	private OutputCollector col;
-
-	// Map to store lapses between conditional windows. We will store words in the hashtags occurrences if this flag is on.	
 	
-	public boolean conditionalWindowAct = false;
+	/*
+	 *  We will send words in between the hashtags occurrences if this flag is on.
+	 */	
+	private boolean conditionalWindowAct = false;
 	
-	private int counter = 0;
+	/*
+	 * Output collector to emit tuples to the next bolt.
+	 */
+	private OutputCollector col;	
 	
-	PrintWriter writer;
-	
-	//Constructor executed in nimbus (central node)
-	public ConditionalWindowBolt(String keyWord, String langField){
-		this.keyWord = keyWord;
-		this.langField = langField;
-		
+	/*
+	 * Constructor executed in nimbus (central node).
+	 */
+	public ConditionalWindowBolt(String keyWord){
+		this.keyWord = keyWord;		
 	}
 	
-	
-	public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
-		// Executed in the workers
-		// TreeMap to save the words alphabetically.
-		col=outputCollector;
-		//Adding keywords: take from input
+	/*
+	 * Method executed in the workers that provides the bolt with an output collector used to emit tuples from this bolt.
+	 *
+	 * @param: conf, the Storm configuration for this spout.
+	 * @param: context, information about the task within the topology.
+	 * @param: collector, used to emit tuples from this spout.
+	 */
+	public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
+		this.col = collector;
 	}
 
-	
-
+	/*
+	 * Process a single tuple of input.
+	 * 
+	 * @param tuple, tuple to process.
+	 */
 	public void execute(Tuple tuple) {
-	
-		String valueField = (String) tuple.getValueByField(TwitterScheme.KafkaValue);
+		// Read the hashtag value from the spout.
+		String valueField = (String) tuple.getValueByField(KafkaTwitterSpout.KAFKAFIELD);		
 		
-		
-		System.out.println("Hashtag received from Kafka in conditional window: "+valueField);
-		
-		
-		//Take keyword from file
-		
-	
-				
-		if (keyWord.equals(valueField)) {
-			// Activate or deactivate.
-			boolean state = conditionalWindowAct;
-			conditionalWindowAct=!state;
-			// From true to negative -> send conditional windows
-			if(state){ // It is now false, finishing windows
-				col.emit(tuple, new Values("0", "1"));
+		// If the hashtag is the input, we start/finish the conditional window.
+		if (this.keyWord.equals(valueField)) {	
+			
+			// If the conditional windows was activated, we emit a message to finish.
+			if(this.conditionalWindowAct){
+				this.col.emit(tuple, new Values("0", "1"));
 			}
+			// Change the conditional value to the opposite state (from start to stop, or from stop to start).
+			this.conditionalWindowAct = !this.conditionalWindowAct;
 		}
-
-		// If already activated
-		else if(conditionalWindowAct){
-			// Update occurrence
-			col.emit(tuple, new Values(valueField, "0"));
+		
+		// If the  hashtag is not the keyword and the conditional windows is activated, we emit the tuple.
+		else if(conditionalWindowAct){ 
+			// Send the occurrence to the next Bolt.
+			this.col.emit(tuple, new Values(valueField, "0"));
 		}
 	}
 	
-		//To parallelize: Send each language from the spout to each bolt for a language-specific bolt
-
+	/*
+	 * This method declares the outputs field for the component. In this case, two String fields with a) the hashtag and b) the stop condition.
+	 */
 	public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-		outputFieldsDeclarer.declare(new Fields("value", "endField"));
+		outputFieldsDeclarer.declare(new Fields(HASHTAGFIELD, STOPCONDITIONFIELD));
 	}
 
 }

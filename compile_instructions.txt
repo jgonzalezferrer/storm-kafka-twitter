@@ -1,0 +1,10 @@
+Compile twitterApp:
+
+cd twitterApp
+mvn clean install
+
+
+Compile storm:
+
+cd storm
+mvn clean compile assembly:single

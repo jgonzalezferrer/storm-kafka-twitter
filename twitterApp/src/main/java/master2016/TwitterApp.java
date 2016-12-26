@@ -1,4 +1,5 @@
 package master2016;
+
 import java.io.FileNotFoundException;
 
 import java.io.FileReader;
@@ -14,29 +15,76 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.json.*;
 
-public class TwitterApp 
-{
+/** TwitterApp: reading Tweets from Twitter. 
+ * 
+ * 
+ * Java	application that reads tweets from	both the Twitter Streaming API and preloaded log file.
+ * The application uses Apache Kafka to store information in order to be able to run the application in a distributed environment.
+ * Furthermore, Kadka is horizontally scalable, fault-tolerant and avoid information lost.
+ * 
+ * @author: Antonio Javier González Ferrer
+ * @author: Aitor Palacios Cuesta
+ *  
+ */
+public class TwitterApp {
+
+	/*
+	 * The buffered reader where we will read the tweets from the Twitter API or preloaded log file.
+	 */
 	private static BufferedReader reader;
 
-	public static void main( String[] args )
-	{
+	/*
+	 * Mode of run: 1 means read from file, 2 read from the Twitter API.
+	 */
+	private static String mode;
+
+	/*
+	 * Key associated with the Twitter App consumer.
+	 */
+	private static String apiKey;
+
+	/*
+	 * Secret associated with the Twitter App consumer.
+	 */	
+	private static String apiSecret;
+
+	/*
+	 * Access token associated with the Twitter App.
+	 */
+	private static String tokenValue;
+
+	/*
+	 * Access token secret.
+	 */
+	private static String tokenSecret;
+
+	/*
+	 *  String in the format IP:port corresponding with the Kafka Broker.
+	 */
+	private static String kafkaUrl;
+
+	/*
+	 * Path to the file with the tweets.
+	 */
+	private static String fileName;
+
+	public static void main(String[] args){
+
+		// The number of arguments must be exactly 7.
 		if (args.length!=7){
 			System.err.println("Error in number of parameters");
 			return;
 		}
-		String mode=args[0];
-		String apiKey=args[1];
-		String apiSecret=args[2];
-		String tokenValue=args[3];
-		String tokenSecret=args[4];
-		String kafkaUrl=args[5];
-		String fileName=args[6];
 
-		for(int i=0; i<args.length; i++){
-			System.out.println(args[i]);
-		}
+		mode = args[0];
+		apiKey = args[1];
+		apiSecret = args[2];
+		tokenValue= args[3];
+		tokenSecret = args[4];
+		kafkaUrl = args[5];
+		fileName = args[6];
 
-		if(mode.equals("1")){
+		if(mode.equals("1")){ // File mode.
 			try{
 				reader = new BufferedReader(new FileReader(fileName));
 			}
@@ -45,56 +93,39 @@ public class TwitterApp
 				return;
 			}
 		}
-		else if (mode.equals("2")){
-			//Read from twitter app
-			ServiceBuilder serv = new ServiceBuilder()
-					.provider(TwitterApi.class)
-					.apiKey(apiKey)
-					.apiSecret(apiSecret);
 
-			Token tok = new Token(tokenValue, tokenSecret);
-
-			OAuthRequest request = new OAuthRequest(Verb.GET,"https://stream.twitter.com/1.1/statuses/sample.json");
-
-			serv.build().signRequest(tok, request);
-			Response response = request.send();
-			reader = new BufferedReader(new InputStreamReader(response.getStream()));
-
+		else if (mode.equals("2")){ //Read from Twitter App.
+			TwitterServiceBuilder twitter = new TwitterServiceBuilder(apiKey, apiSecret, tokenValue, tokenSecret);
+			reader = twitter.getReader();			
 		}
+
 		else{
 			System.err.println("Error in the first parameter, it must be either 1 or 2");
 			return;
 		}
-		//TODO: Change topic to the language
+
+		// Create the Kafka producer that publishes records to the Kafka cluster.
 		TwitterKafkaProducer prod = new TwitterKafkaProducer(kafkaUrl);
 		String tweet;
 		try {
 			while((tweet=reader.readLine())!=null){
-				String line = tweet;
-				//System.out.println(line);
-				JSONObject obj = new JSONObject(line);
-				if(!obj.has("lang")) continue;	
-				String lang = obj.getString("lang");
+				// Receiving JSON format tweet.
+				JSONObject obj = new JSONObject(tweet);
 				
-				System.out.println("Lang is : "+lang);
-				//TODO: if(lang is in listoflangs)
-				//if (lang.equals("en")){
-					JSONArray hashtags = obj.getJSONObject("entities").getJSONArray("hashtags");
-					for(int i=0; i<hashtags.length(); i++){
-						String hashtag = hashtags.getJSONObject(i).getString("text");
-						System.out.println("Hashtag is: "+hashtag);
-						prod.sendTweet(new Tweet(lang, hashtag));
-					//}
+				// We discard tweets without language field.
+				if(!obj.has("lang")) continue;	
+				
+				String lang = obj.getString("lang");
+				JSONArray hashtags = obj.getJSONObject("entities").getJSONArray("hashtags");
+				
+				// Reading all the hashtags from a teet.
+				for(int i=0; i<hashtags.length(); i++){
+					// We send every tweet to the cluster in spite of the language, becase Kafka
+					// performance is effectively constant with respect to data size.
+					String hashtag = hashtags.getJSONObject(i).getString("text");
+					prod.sendTweet(new Tweet(lang, hashtag));
 				}
-
-			}	
-
-
-
-
-
-
-
+			} 	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
