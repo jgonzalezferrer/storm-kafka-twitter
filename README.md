@@ -4,6 +4,14 @@ The goal of this project is to implement a Java application that reads tweets fr
 
 The application is able to run in a distributed environment and uses Apache Kafka to store the tweets and avoid information lost and Storm to find out the trending topics. The output of the application is a set of files, one for each language, with the most used hashtags (top-3) in between two occurrences of a given hashtag.
 
+Installation
+----------- 
+Dependencies:
+
+* Oracle Java 7
+* Storm 1.0.2
+* Kafka 2.11-0.10.1.0
+
 Instructions on how to execute
 ----------- 
 Compile twitterApp:
